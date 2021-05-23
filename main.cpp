@@ -7,6 +7,7 @@
 #include "mult.hpp"
 #include "op.hpp"
 #include "add.hpp"
+#include "iterator.hpp"
 
 using namespace std;
 
@@ -29,16 +30,29 @@ int main() {
     Add* Addptr = dynamic_cast<Add*>(Addbaseptr);
     Addptr->SetNode(Addptr);
 
+    
+    Iterator Additerator(Addbaseptr);
+    
     cout << "Addptr has " << Addptr->number_of_children() << " children" << endl;
     cout << "Getting children: " << endl;
 
-    for (int i = 0; i < Addptr->number_of_children(); ++i) {
-        cout << Addptr->get_child(i)->evaluate() << endl;
+    while (Additerator.is_done() == false) 
+    {
+        cout << "i: " << Additerator.current_index() << endl << "node: " << Additerator.current_node()->stringify() << endl << endl;
+        Additerator.next();
     }
+
+    /*for (int i = 0; i < Addptr->number_of_children(); ++i) {
+        cout << Addptr->get_child(i)->evaluate() << endl;
+    }*/
 
     cout << "Finished getting children" << endl;
 
+
+
     //Base* minus = new Sub(add, two);
+
+
 
     std::cout << Addbaseptr->stringify() << " = " << Addbaseptr->evaluate() << std::endl;
 
