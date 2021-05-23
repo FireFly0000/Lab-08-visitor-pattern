@@ -1,6 +1,5 @@
 #ifndef __BASE_HPP__
 #define __BASE_HPP__
-
 #include <string>
 
 class Base {
@@ -10,7 +9,9 @@ class Base {
         /* Pure Virtual Functions */
         virtual double evaluate() = 0;
         virtual std::string stringify() = 0;
-        virtual int number_of_children() = 0;
+        
+	//still neeed to implement
+	    virtual int number_of_children() = 0;
         virtual Base* get_child(int i) = 0;
 };
 
