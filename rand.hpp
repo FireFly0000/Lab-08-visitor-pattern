@@ -1,28 +1,31 @@
 #pragma once
-#ifndef __OP_HPP__
-#define __OP_HPP__
+
+#ifndef __RAND_HPP__
+#define __RAND_HPP__
 
 #include "base.hpp"
 #include "visitor.hpp"
 #include "visitLaTex.hpp"
 
-class Op : public Base {
+
+class Rand : public Base {
 private: 
     double _value;
 public:
-    Op(double value) : _value(value) { }; // not sure, may have to fix
+    Rand() { this->_value = rand() % 100; }; // may have to fix
     virtual double evaluate() { return this->_value; };
-    virtual std::string stringify() { 
+    virtual std::string stringify() {
         std::string valuetostring = std::to_string(_value);
 	for (int i =0; i<7; i++){
 		if (valuetostring.at(valuetostring.size()-1) == '0' || valuetostring.at(valuetostring.size()-1) == '.'){
-			valuetostring.erase(valuetostring.end()-1);
-		}
-		if (valuetostring.at(valuetostring.size()-1) != '0' && valuetostring.at(valuetostring.size()-1) != '.'){
-			break;
-    		}
-  	}	
-        return valuetostring; };
+                        valuetostring.erase(valuetostring.end()-1);
+                }
+                if (valuetostring.at(valuetostring.size()-1) != '0' && valuetostring.at(valuetostring.size()-1) != '.'){
+                        break;
+                }
+        }
+        return valuetostring;
+    };
     virtual int number_of_children() {
 	return 0;
     }
@@ -30,12 +33,10 @@ public:
                 std:: cout << "ERROR, AN OPERAND HAS NO CHILDREN" << std::endl;
                 return nullptr;
     }
-    void accept(Visitor* visitor, int index){
-        visitor->visit_op(this);
-    }
+    /*void accept(Visitor* visitor, int index){
+ 	visitor->visit_rand(this);
+    }*/
 
 };
 
-#endif //__OP_HPP__
-
-
+#endif //__RAND_HPP__

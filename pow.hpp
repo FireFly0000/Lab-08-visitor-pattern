@@ -4,6 +4,9 @@
 
 #include "base.hpp"
 #include <cmath> // for pow
+#include "visitor.hpp"
+#include "visitLaTex.hpp"
+
 
 class Pow : public Base {
 private:
@@ -24,9 +27,17 @@ public:
         std::string res = "(" + _lop->stringify() + "**" +  _rop->stringify() +  ")";
         return res;
      };
-     virtual int number_of_children() {
-        return 2;
+    virtual int number_of_children() {
+        if(_lop != nullptr && _rop != nullptr){
+                return 2;
+        }
+        else if ( (_lop == nullptr && _rop !=nullptr) || (_rop == nullptr && _lop !=nullptr) ){
+                return 1;
+        }
+        else return 0;
+
     }
+
     virtual Base* get_child(int i) {
         if (i == 0){
                 return _lop;
@@ -40,7 +51,7 @@ public:
         }
     }
 
-
+virtual void accept(Visitor* visitor, int index) { } 
 };
 
 #endif //__POW_HPP__

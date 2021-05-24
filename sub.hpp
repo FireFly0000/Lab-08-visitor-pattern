@@ -3,6 +3,8 @@
 #define __SUB_HPP__
 
 #include "base.hpp"
+#include "visitor.hpp"
+#include "visitLaTex.hpp"
 
 class Sub : public Base {
 private:
@@ -23,8 +25,16 @@ public:
 	return res;
     };
     virtual int number_of_children() {
-	return 2;
+        if(_lop != nullptr && _rop != nullptr){
+                return 2;
+        }
+        else if ( (_lop == nullptr && _rop !=nullptr) || (_rop == nullptr && _lop !=nullptr) ){
+                return 1;
+        }
+        else return 0;
+
     }
+
     virtual Base* get_child(int i) {
         if (i == 0){
                 return _lop;
@@ -37,7 +47,7 @@ public:
                 return nullptr;
         }
     }
-	
+virtual void accept(Visitor* visitor, int index){ }	
 };
 
 #endif //__SUB_HPP__

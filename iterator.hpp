@@ -6,6 +6,7 @@
 
 #include "base.hpp"
 
+
 class Iterator {
     protected:
         struct base_iterator
@@ -26,4 +27,4 @@ class Iterator {
         int current_index();
 };
 
-#endif
+#endif //_ITERATOR_HPP_

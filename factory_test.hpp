@@ -79,6 +79,58 @@ TEST(FactoryTest, AllOperatorsWithDoubleNeg) {
     EXPECT_DOUBLE_EQ(op->evaluate(), -4222.9319999999989);
 }
 
+TEST(BaseNumChild, Operand){
+	Base* op = new Op(2);
+	EXPECT_EQ(op->number_of_children(), 0);
+}
+TEST(BaseNumChild, OperatorOneChild){
+        Base* op = new Op(2);
+	Base* add = new Add(op, nullptr);
+        EXPECT_EQ(add->number_of_children(), 1);
+}
+TEST(BaseNumChild, OperatorTwoChild){
+        Base* two = new Op(2);
+	Base* one = new Op(1);
+        Base* add = new Add(two, one);
+        EXPECT_EQ(add->number_of_children(), 2);
+}
+TEST(BaseNumChild, OperatorZeroChild){
+        Base* add = new Add(nullptr, nullptr);
+        EXPECT_EQ(add->number_of_children(), 0);
+}
+
+
+
+TEST(BaseGetChild, Operand){
+        Base* two = new Op(2);
+        EXPECT_TRUE(two->get_child(0) == nullptr);
+}
+TEST(BaseGetChild, OperatorLeft){
+        Base* two = new Op(2);
+	Base* three = new Op(3);
+        Base* mult = new Mult(three, two);
+        EXPECT_DOUBLE_EQ(mult->get_child(1)->evaluate(), 2);
+}
+TEST(BaseGetChild, OperatorRight){
+        Base* two = new Op(2);
+        Base* three = new Op(3);
+        Base* div = new Div(three, two);
+        EXPECT_DOUBLE_EQ(div->get_child(0)->evaluate(), 3);
+}
+TEST(BaseGetChild, OperatorAsChild){
+        Base* two = new Op(2);
+        Base* three = new Op(3);
+        Base* mult = new Mult(three, two);
+	
+	Base* four = new Op(4);
+	Base* pow = new Pow(mult, four);
+        EXPECT_DOUBLE_EQ(pow->get_child(0)->evaluate(), 6);
+}
+
+
+
+
+
 
 #endif
 
