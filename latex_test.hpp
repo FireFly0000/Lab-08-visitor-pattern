@@ -11,8 +11,7 @@
 #include "visitor.hpp"
 #include "visitLaTex.hpp"
 #include "iterator.hpp"
-#include <ostream>
-
+#include <sstream>
 
 std::string PrintLaTeX(Base* ptr) {
     VisitLatex* v = new VisitLatex();
@@ -25,18 +24,18 @@ std::string PrintLaTeX(Base* ptr) {
 }
 
 TEST(LatexTest, AddingValues) {
-    outputstream os;
+    std::stringstream os;
     Base* two = new Op(2);
     Base* five = new Op(5);
     Base* add = new Add(two, five);
 
     os << PrintLaTeX(add);
 
-    EXPECT_EQ(os, "${({2}+{5})}$")
+    EXPECT_EQ(os.str(), "${({2}+{5})}$")
 }
 
 TEST(LatexTest, AddingandSubtracting) {
-    outputstream os;
+    std::stringstream os;
     Base* two = new Op(2);
     Base* five = new Op(5);
     Base* seven = new Op(7);
@@ -45,11 +44,11 @@ TEST(LatexTest, AddingandSubtracting) {
 
     os << PrintLaTeX(min);
 
-    EXPECT_EQ(os, "${({({2}+{5})}-{7})}$")
+    EXPECT_EQ(os.str(), "${({({2}+{5})}-{7})}$")
 }
 
 TEST(LatexTest, MultandDiv) {
-    outputstream os;
+    std::stringstream os;
     Base* two = new Op(2);
     Base* five = new Op(5);
     Base* mult = new Mult(two, five);
@@ -57,11 +56,11 @@ TEST(LatexTest, MultandDiv) {
 
     os << PrintLaTeX(div);
 
-    EXPECT_EQ(os, "${\\frac{({2}\\cdot{5})}{2}}$");
+    EXPECT_EQ(os.str(), "${\\frac{({2}\\cdot{5})}{2}}$");
 }
 
 TEST(LatexTest, AddMultPow) {
-    outputstream os;
+    std::stringstream os;
     Base* two = new Op(2);
     Base* five = new Op(5);
     Base* three = new Op(3);
@@ -71,10 +70,10 @@ TEST(LatexTest, AddMultPow) {
 
     os << PrintLaTeX(pow);
 
-    EXPECT_EQ(os, "$({{({({5}+{3})}\\cdot{2})}^{3})}$");
+    EXPECT_EQ(os.str(), "$({{({({5}+{3})}\\cdot{2})}^{3})}$");
 }
 TEST(LatexTest, NegativeMultDiv) {
-    outputstream os;
+    std::stringstream os;
     Base* two = new Op(-2);
     Base* five = new Op(5);
     Base* three = new Op(-3);
@@ -83,7 +82,7 @@ TEST(LatexTest, NegativeMultDiv) {
 
     os << PrintLaTeX(div);
 
-    EXPECT_EQ(os, "${\\frac{({5}\\cdot{-2})}{-3}}$");
+    EXPECT_EQ(os.str(), "${\\frac{({5}\\cdot{-2})}{-3}}$");
 }
 
 
