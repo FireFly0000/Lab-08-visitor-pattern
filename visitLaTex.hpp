@@ -73,6 +73,15 @@ public:
     void visit_pow_end(Pow* node, std::string& res){
 	res = res + ")}";
     }
+    std::string PrintLaTeX(Base* ptr) {
+        VisitLatex* v = new VisitLatex();
+        std::string res;
+        for (Iterator it(ptr); !it.is_done(); it.next()) {
+            it.current_node()->accept(v, it.current_index(), res);
+        }
+        res = "$" + res + "$";
+        return res;
+    }
 };
 
 #endif //__VISITLATEX_HPP__
