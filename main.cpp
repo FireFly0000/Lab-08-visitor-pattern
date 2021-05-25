@@ -28,27 +28,49 @@ std::string PrintLaTeX(Base* ptr){
 
 
 int main(int argc, char* argv[]) {
-    Factory test;
+    //Factory test;
     //const char* args[] = { "-14.2", "**", "3", "-", "-32", "+", "16", "/", "2", "*", "3"}; 
-    //const char* args[] = {"4", "-", "3"};
-    
-    
-    const char* args[argc-1];
+    /*const char* args[argc-1];
     for(int i = 0; i<argc-1; i++){
 	args[i] = argv[i+1];
-    }                                                 
-    
+    }*/                                                 
     //for(int i = 0; i< argc-1; i++){
 	//cout << args[i];
     //}
     //cout << endl;
-    Base* op = test.parse(args, argc - 1);
+    //Base* op = test.parse(args, argc - 1);
     //cout << " = " << op->evaluate() << endl;
     
-    //cout << op->number_of_children() << endl;
-    //cout << op->get_child(0)->evaluate() << endl;
+    Base* five = new Op(5);
+    Base* zero = new Op(0);
+    Base* one = new Op(1);
+    Base* add = new Add(five, zero);
+    Base* add_1 = new Add(one, add); 
+    cout << add_1->stringify() << " = ";
+    cout << PrintLaTeX(add_1) << endl;
+
+    Base* seven = new Op(7);
+    Base* two = new Op(2);
+    Base* three = new Op(3);   
+    Base* sub_1 = new Sub(seven, two);
+    Base* sub_2 = new Add(three, one);
+    Base* sub_3 = new Sub(sub_1, sub_2);
+    cout << sub_3->stringify() << " = ";
+    cout << PrintLaTeX(sub_3) << endl;
+
+    Base* six = new Op(6);
+    Base* sixAthree = new Add(six, three);
+    Base* mult = new Mult(sixAthree, two);
+    cout << mult->stringify() << " = ";
+    cout << PrintLaTeX(mult) << endl;
     
-    cout << PrintLaTeX(op);
-    cout << endl;
+    Base* div = new Div(six, seven);
+    cout << div->stringify() << " = ";
+    cout << PrintLaTeX(div) << endl;
+    
+    Base* pow = new Pow(add, seven);
+    cout << pow->stringify() << " = ";
+    cout << PrintLaTeX(pow) << endl;
+   
     return 0;
 }

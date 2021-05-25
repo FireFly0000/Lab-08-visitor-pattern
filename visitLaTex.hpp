@@ -33,18 +33,46 @@ public:
     void visit_add_end(Add* node, std::string& res){
 	res = res + ")}";
     }
-    //void visit_sub_begin(Sub* node);
-    //void visit_sub_middle(Sub* node);
-    //void visit_sub_end(Sub* node);
-    //void visit_mult_begin(Mult* node);
-    //void visit_mult_middle(Mult* node);
-    //void visit_mult_end(Mult* node);
-    //void visit_div_begin(Div* node);
-    //void visit_div_middle(Div* node);
-    //void visit_div_end(Div* node);
-    //void visit_pow_begin(Pow* node);
-    //void visit_pow_middle(Pow* node);
-    //void visit_pow_end(Pow* node);
+    
+    //===============================================
+    void visit_sub_begin(Sub* node, std::string& res){
+	res = res + "{(";
+    }
+    void visit_sub_middle(Sub* node, std::string& res){
+	res = res + "-";
+    }
+    void visit_sub_end(Sub* node, std::string& res){
+	res = res + ")}";
+    }
+    
+    //================================================
+    void visit_mult_begin(Mult* node, std::string& res){
+	res = res + "{(";
+    }
+    void visit_mult_middle(Mult* node, std::string& res){
+	res = res + "\\cdot";
+    }
+    void visit_mult_end(Mult* node, std::string& res){
+	res = res + ")}";
+    }
+
+    //==============================================
+    void visit_div_begin(Div* node, std::string& res){
+	res = res + "{\\frac";
+    }
+    void visit_div_middle(Div* node, std::string& res){res = res + ""; }
+    void visit_div_end(Div* node, std::string& res){ res = res + "}"; }
+    
+    //==============================================
+    void visit_pow_begin(Pow* node, std::string& res){
+	res = res + "({";
+    }
+    void visit_pow_middle(Pow* node, std::string& res){
+	res = res + "^";
+    }
+    void visit_pow_end(Pow* node, std::string& res){
+	res = res + ")}";
+    }
 };
 
 #endif //__VISITLATEX_HPP__

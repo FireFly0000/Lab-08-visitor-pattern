@@ -51,7 +51,19 @@ public:
         }
     }
 
-virtual void accept(Visitor* visitor, int index, std::string& res) { } 
+virtual void accept(Visitor* visitor, int index, std::string& res) { 
+	if(index == 0){
+                visitor->visit_pow_begin(this, res);
+        }
+        else if(index == 1){
+                visitor->visit_pow_middle(this, res);
+        }
+        else if(index == 2){
+                visitor->visit_pow_end(this, res);
+        }
+
+  }
+
 };
 
 #endif //__POW_HPP__
