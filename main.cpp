@@ -24,6 +24,7 @@ std::string PrintLaTeX(Base* ptr){
                 it.current_node()->accept(v,it.current_index(), res);
         }
 	res = "$" + res + "$";
+        delete v;
         return res;
 }
 std::string PrintMathML(Base* ptr){
@@ -33,24 +34,25 @@ std::string PrintMathML(Base* ptr){
                 it.current_node()->accept(v,it.current_index(), res);
         }
         res = "<math>\n" + res + "</math>";
+        delete v;
 	return res;
 }
 
 int main(int argc, char* argv[]) {
-    //Factory test;
+    Factory test;
     //const char* args[] = { "-14.2", "**", "3", "-", "-32", "+", "16", "/", "2", "*", "3"}; 
-    /*const char* args[argc-1];
+    const char* args[argc-1];
     for(int i = 0; i<argc-1; i++){
 	args[i] = argv[i+1];
-    }*/                                                 
-    //for(int i = 0; i< argc-1; i++){
-	//cout << args[i];
-    //}
-    //cout << endl;
-    //Base* op = test.parse(args, argc - 1);
+    }                                                 
+    for(int i = 0; i< argc-1; i++){
+	cout << args[i];
+    }
+    Base* op = test.parse(args, argc - 1);
     //cout << " = " << op->evaluate() << endl;
+    cout << " = " << PrintLaTeX(op) << endl;
     
-    Base* five = new Op(5);
+  /* Base* five = new Op(5);
     Base* zero = new Op(0);
     Base* one = new Op(1);
     Base* add = new Add(five, zero);
@@ -79,11 +81,12 @@ int main(int argc, char* argv[]) {
     
     Base* pow = new Pow(add, seven);
     cout << pow->stringify() << " = ";
-    cout << PrintLaTeX(pow) << endl;
+    cout << PrintLaTeX(pow) << endl;*/
     
-    cout << endl << endl;	
-    cout << add_1->stringify() << " = " << endl; 
-    cout << PrintMathML(add_1) << endl;
- 
+    //cout << endl << endl;	
+    //cout << add_1->stringify() << " = " << endl; 
+    //cout << PrintMathML(add_1) << endl;
+    
+   
     return 0;
 }

@@ -8,6 +8,7 @@
 //#include "pow_test.hpp"
 //#include "sub_test.hpp"
 //#include "mock_test.hpp"
+#include "latex_test.hpp"
 #include "factory_test.hpp"
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
