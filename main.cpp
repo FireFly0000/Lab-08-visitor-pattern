@@ -12,6 +12,7 @@
 #include "factory.hpp"
 #include "iterator.cpp"
 #include "visitor.hpp"
+#include "visitMathMl.hpp"
 #include "visitLaTex.hpp"
 #include "iterator.hpp"
 
@@ -25,7 +26,15 @@ std::string PrintLaTeX(Base* ptr){
 	res = "$" + res + "$";
         return res;
 }
-
+std::string PrintMathML(Base* ptr){
+	VisitMathml* v = new VisitMathml();
+        std::string res;
+        for(Iterator it(ptr); !it.is_done();it.next()){
+                it.current_node()->accept(v,it.current_index(), res);
+        }
+        res = "<math>\n" + res + "</math>";
+	return res;
+}
 
 int main(int argc, char* argv[]) {
     //Factory test;
@@ -71,6 +80,10 @@ int main(int argc, char* argv[]) {
     Base* pow = new Pow(add, seven);
     cout << pow->stringify() << " = ";
     cout << PrintLaTeX(pow) << endl;
-   
+    
+    cout << endl << endl;	
+    cout << add_1->stringify() << " = " << endl; 
+    cout << PrintMathML(add_1) << endl;
+ 
     return 0;
 }
