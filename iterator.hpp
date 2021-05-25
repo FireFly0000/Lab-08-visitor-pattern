@@ -6,6 +6,7 @@
 
 #include "base.hpp"
 
+
 class Iterator {
     protected:
         struct base_iterator
@@ -24,6 +25,7 @@ class Iterator {
         bool is_done();
         Base* current_node();
         int current_index();
+        //std::string PrintLaTeX(Base* ptr);
 };
 
-#endif
+#endif //_ITERATOR_HPP_
