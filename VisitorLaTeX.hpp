@@ -25,18 +25,14 @@ public:
     void setPtr(Visitor* ptr) { _ptr = ptr; };
     // Nodes with no children are visited only once (index = 0)
     void visit_op(Op* node) {
-        if (node->getRead() == false)
-        {
+      
             os << "{" << node->evaluate() << "}";
-            node->setRead(true);
-        }
+        
     }
     void visit_rand(Rand* node) {
-        if (node->getRead() == false)
-        {
+       
             os << "{" << node->evaluate() << "}";
-            node->setRead(true);
-        }
+        
     }
     std::string PrintLaTeX(Base* ptr)
     {
@@ -44,50 +40,56 @@ public:
         _baseptr = ptr;
 
         os << "$";
-        
-        
+
         //while (!it.is_done()) //it.current_index() < ptr->number_of_children()
         //{
             //if (it.current_node()->getRead() == false) {
-            ptr->accept(_ptr, it.current_index());
-            ptr->accept(_ptr, it.current_index()+1);
-            ptr->accept(_ptr, it.current_index()+2);
-            //ptr->accept(_ptr, it.current_index()+2);
-            //it.current_node()->setRead(true);
+            ptr->accept(_ptr, it.current_index()); // begin
+            ptr->accept(_ptr, it.current_index()+1); // middle
+            ptr->accept(_ptr, it.current_index()+2); // end
 
-            //it.next();
-        //}
-            //os << "{" << ptr->get_child(it.current_index()) << "}";
-            //it.next();
         os << "$" << std::endl;
         return os.str();
     }
-    // Nodes with two children are visited three times.
-    // index = 0 -> begin
-    // index = 1 -> middle
-    // index = 2 -> end
+
 
     void visit_add_begin(Add* node)
     {
-        bool closepar = false;
         Base* leftop = node->get_child(0);
         Iterator it(leftop);
+        Iterator next(leftop);
         os << "{";
         os << "(";
         while (it.is_done() == false)
         {
-            
-            if (it.current_node()->number_of_children() == 0)
-            {
+
+
+
+            if (it.current_node()->number_of_children() == 0) {
                 os << "{" << it.current_node()->stringify() << "}";
-              
             }
+
             else if (it.current_node()->number_of_children() == 2 && it.current_index() == 1) {
-                
                 //leftop->accept(_ptr, it.current_index());
+
                 if (it.current_node()->stringify().find("+") != std::string::npos)
                 {
                     os << "+";
+                }
+                else if (it.current_node()->stringify().find("*") != std::string::npos)
+                {
+                    os << "\\cdot";
+                }
+                else if (it.current_node()->stringify().find("/") != std::string::npos) {
+
+                    int numindex = os.str().find_last_of("{");
+                    std::string num = os.str().substr(numindex, os.str().find_last_of("}"));
+                    
+                    os << "\\frac";
+                    //os << num;
+                }
+                else if (it.current_node()->stringify().find("**") != std::string::npos) {
+                    os << "^";
                 }
                 else //(it.current_node()->stringify() == "-")
                 {
@@ -95,10 +97,9 @@ public:
                 }
             }
             it.next();
+           // next.next();
         }
         os << ")";
-        //int i = 0;
-        //os << "{" << node->get_child(0)->stringify() << "}";
          
     }
     void visit_add_middle(Add* node) {
@@ -109,22 +110,42 @@ public:
         }
     }
     void visit_add_end(Add* node) {
-        //if (node->getRead() == false)
         Base* rightop = node->get_child(1);
         Iterator it(rightop);
+        Iterator next(rightop);
+        os << "{";
         os << "(";
         while (it.is_done() == false)
         {
-            if (it.current_node()->number_of_children() == 0)
-            {
+
+
+
+            if (it.current_node()->number_of_children() == 0) {
                 os << "{" << it.current_node()->stringify() << "}";
             }
+
             else if (it.current_node()->number_of_children() == 2 && it.current_index() == 1) {
-                // add checks to see if its division, mult, or pow and replace symbols with \cdot, ^, and \frac{numerator}{denominator}
-                //rightop->accept(_ptr, it.current_index());
+                //leftop->accept(_ptr, it.current_index());
+
                 if (it.current_node()->stringify().find("+") != std::string::npos)
                 {
                     os << "+";
+                }
+                else if (it.current_node()->stringify().find("*") != std::string::npos)
+                {
+                    os << "\\cdot";
+                }
+                else if (it.current_node()->stringify().find("/") != std::string::npos) {
+
+                    int numindex = os.str().find_last_of("{");
+                    std::string num = os.str().substr(numindex, os.str().find_last_of("}"));
+                
+
+                    os << "\\frac";
+                    //os << num;
+                }
+                else if (it.current_node()->stringify().find("**") != std::string::npos) {
+                    os << "^";
                 }
                 else //(it.current_node()->stringify() == "-")
                 {
@@ -132,32 +153,47 @@ public:
                 }
             }
             it.next();
+           // next.next();
         }
-
-        //int i = 0;
-        //os << "{" << node->get_child(0)->stringify() << "}";
         os << ")";
         os << "}";
     }
     void visit_sub_begin(Sub* node) {
         Base* leftop = node->get_child(0);
         Iterator it(leftop);
+        Iterator next(leftop);
         os << "{";
         os << "(";
         while (it.is_done() == false)
         {
 
-            if (it.current_node()->number_of_children() == 0)
-            {
-                os << "{" << it.current_node()->stringify() << "}";
 
+            if (it.current_node()->number_of_children() == 0) {
+                os << "{" << it.current_node()->stringify() << "}";
             }
+
             else if (it.current_node()->number_of_children() == 2 && it.current_index() == 1) {
                 //leftop->accept(_ptr, it.current_index());
-                
+
                 if (it.current_node()->stringify().find("+") != std::string::npos)
                 {
                     os << "+";
+                }
+                else if (it.current_node()->stringify().find("*") != std::string::npos)
+                {
+                    os << "\\cdot";
+                }
+                else if (it.current_node()->stringify().find("/") != std::string::npos) {
+
+                    int numindex = os.str().find_last_of("{");
+                    std::string num = os.str().substr(numindex, os.str().find_last_of("}"));
+                    
+
+                    os << "\\frac";
+                    //os << num;
+                }
+                else if (it.current_node()->stringify().find("**") != std::string::npos) {
+                    os << "^";
                 }
                 else //(it.current_node()->stringify() == "-")
                 {
@@ -165,6 +201,7 @@ public:
                 }
             }
             it.next();
+            //next.next();
         }
         os << ")";
     }
@@ -174,20 +211,38 @@ public:
     void visit_sub_end(Sub* node) {
         Base* rightop = node->get_child(1);
         Iterator it(rightop);
+        Iterator next(rightop);
+        os << "{";
         os << "(";
         while (it.is_done() == false)
         {
-            if (it.current_node()->number_of_children() == 0)
-            {
+
+            if (it.current_node()->number_of_children() == 0) {
                 os << "{" << it.current_node()->stringify() << "}";
             }
-            else if (it.current_node()->number_of_children() == 2 && it.current_index() == 1) {
-                // add checks to see if its division, mult, or pow and replace symbols with \cdot, ^, and \frac{numerator}{denominator}
 
-                //rightop->accept(_ptr, it.current_index());
+            else if (it.current_node()->number_of_children() == 2 && it.current_index() == 1) {
+                //leftop->accept(_ptr, it.current_index());
+
                 if (it.current_node()->stringify().find("+") != std::string::npos)
                 {
                     os << "+";
+                }
+                else if (it.current_node()->stringify().find("*") != std::string::npos)
+                {
+                    os << "\\cdot";
+                }
+                else if (it.current_node()->stringify().find("/") != std::string::npos) {
+
+                    int numindex = os.str().find_last_of("{");
+                    std::string num = os.str().substr(numindex, os.str().find_last_of("}"));
+                   
+
+                    os << "\\frac";
+                   // os << num;
+                }
+                else if (it.current_node()->stringify().find("**") != std::string::npos) {
+                    os << "^";
                 }
                 else //(it.current_node()->stringify() == "-")
                 {
@@ -195,22 +250,303 @@ public:
                 }
             }
             it.next();
+            //next.next();
         }
-
-        //int i = 0;
-        //os << "{" << node->get_child(0)->stringify() << "}";
         os << ")";
         os << "}";
     }
-    void visit_mult_begin(Mult* node) {}
-    void visit_mult_middle(Mult* node) {}
-    void visit_mult_end(Mult* node) {}
-    void visit_div_begin(Div* node) {}
-    void visit_div_middle(Div* node) {}
-    void visit_div_end(Div* node) {}
-    void visit_pow_begin(Pow* node) {}
-    void visit_pow_middle(Pow* node) {}
-    void visit_pow_end(Pow* node) {}
+    void visit_mult_begin(Mult* node)
+    {
+        Base* leftop = node->get_child(0);
+        Iterator it(leftop);
+        Iterator next(leftop);
+        os << "{";
+        os << "(";
+        while (it.is_done() == false)
+        {
+
+            if (it.current_node()->number_of_children() == 0) {
+                os << "{" << it.current_node()->stringify() << "}";
+            }
+
+            else if (it.current_node()->number_of_children() == 2 && it.current_index() == 1) {
+                //leftop->accept(_ptr, it.current_index());
+
+                if (it.current_node()->stringify().find("+") != std::string::npos)
+                {
+                    os << "+";
+                }
+                else if (it.current_node()->stringify().find("*") != std::string::npos)
+                {
+                    os << "\\cdot";
+                }
+                else if (it.current_node()->stringify().find("/") != std::string::npos) {
+
+                    int numindex = os.str().find_last_of("{");
+                    std::string num = os.str().substr(numindex, os.str().find_last_of("}"));
+                   
+
+                    os << "\\frac";
+                    //os << num;
+                }
+                else if (it.current_node()->stringify().find("**") != std::string::npos) {
+                    os << "^";
+                }
+                else //(it.current_node()->stringify() == "-")
+                {
+                    os << "-";
+                }
+            }
+            it.next();
+            //next.next();
+        }
+        os << ")";
+    }
+    void visit_mult_middle(Mult* node) {
+        os << "\\cdot";
+    }
+    void visit_mult_end(Mult* node) {
+        Base* rightop = node->get_child(1);
+        Iterator it(rightop);
+        Iterator next(rightop);
+        os << "{";
+        os << "(";
+        while (it.is_done() == false)
+        {
+
+            if (it.current_node()->number_of_children() == 0) {
+                os << "{" << it.current_node()->stringify() << "}";
+            }
+
+            else if (it.current_node()->number_of_children() == 2 && it.current_index() == 1) {
+                //leftop->accept(_ptr, it.current_index());
+
+                if (it.current_node()->stringify().find("+") != std::string::npos)
+                {
+                    os << "+";
+                }
+                else if (it.current_node()->stringify().find("*") != std::string::npos)
+                {
+                    os << "\\cdot";
+                }
+                else if (it.current_node()->stringify().find("/") != std::string::npos) {
+
+                    int numindex = os.str().find_last_of("{");
+                    std::string num = os.str().substr(numindex, os.str().find_last_of("}"));
+                 
+                    os << "\\frac";
+                    //os << num;
+                }
+                else if (it.current_node()->stringify().find("**") != std::string::npos) {
+                    os << "^";
+                }
+                else //(it.current_node()->stringify() == "-")
+                {
+                    os << "-";
+                }
+            }
+            it.next();
+            //next.next();
+        }
+        os << ")";
+        os << "}";
+    }
+    void visit_div_begin(Div* node) {
+        os << "{"<< "\\frac";
+    }
+    void visit_div_middle(Div* node) {
+        Base* leftop = node->get_child(0);
+        Iterator it(leftop);
+        Iterator next(leftop);
+        os << "{";
+        while (it.is_done() == false)
+        {
+
+
+            if (it.current_node()->number_of_children() == 0) {
+                os << "{" << it.current_node()->stringify() << "}";
+            }
+
+            else if (it.current_node()->number_of_children() == 2 && it.current_index() == 1) {
+                //leftop->accept(_ptr, it.current_index());
+
+                if (it.current_node()->stringify().find("+") != std::string::npos)
+                {
+                    os << "+";
+                }
+                else if (it.current_node()->stringify().find("*") != std::string::npos)
+                {
+                    os << "\\cdot";
+                }
+                else if (it.current_node()->stringify().find("/") != std::string::npos) {
+
+                    int numindex = os.str().find_last_of("{");
+                    std::string num = os.str().substr(numindex, os.str().find_last_of("}"));
+                    os.str().pop_back();
+                    os.str().pop_back();
+                    os.str().pop_back();
+
+                    os << "\\frac";
+                    //os << num;
+                }
+                else if (it.current_node()->stringify().find("**") != std::string::npos) {
+                    os << "^";
+                }
+                else //(it.current_node()->stringify() == "-")
+                {
+                    os << "-";
+                }
+            }
+            it.next();
+            //next.next();
+        }
+    }
+    void visit_div_end(Div* node) {
+        Base* rightop = node->get_child(1);
+        Iterator it(rightop);
+        Iterator next(rightop);
+        os << "{";
+        while (it.is_done() == false)
+        {
+
+            if (it.current_node()->number_of_children() == 0) {
+                os << "{" << it.current_node()->stringify() << "}";
+            }
+
+            else if (it.current_node()->number_of_children() == 2 && it.current_index() == 1) {
+                //leftop->accept(_ptr, it.current_index());
+
+                if (it.current_node()->stringify().find("+") != std::string::npos)
+                {
+                    os << "+";
+                }
+                else if (it.current_node()->stringify().find("*") != std::string::npos)
+                {
+                    os << "\\cdot";
+                }
+                else if (it.current_node()->stringify().find("/") != std::string::npos) {
+
+                    int numindex = os.str().find_last_of("{");
+                    std::string num = os.str().substr(numindex, os.str().find_last_of("}"));
+                    os.str().pop_back();
+                    os.str().pop_back();
+                    os.str().pop_back();
+                    os << "\\frac";
+                    //os << num;
+                }
+                else if (it.current_node()->stringify().find("**") != std::string::npos) {
+                    os << "^";
+                }
+                else //(it.current_node()->stringify() == "-")
+                {
+                    os << "-";
+                }
+            }
+            it.next();
+            //next.next();
+        }
+        os << "}";
+    }
+    void visit_pow_begin(Pow* node) {
+        Base* leftop = node->get_child(0);
+        Iterator it(leftop);
+        Iterator next(leftop);
+        os << "{";
+        os << "(";
+        while (it.is_done() == false)
+        {
+
+
+            if (it.current_node()->number_of_children() == 0) {
+                os << "{" << it.current_node()->stringify() << "}";
+            }
+
+            else if (it.current_node()->number_of_children() == 2 && it.current_index() == 1) {
+                //leftop->accept(_ptr, it.current_index());
+
+                if (it.current_node()->stringify().find("+") != std::string::npos)
+                {
+                    os << "+";
+                }
+                else if (it.current_node()->stringify().find("*") != std::string::npos)
+                {
+                    os << "\\cdot";
+                }
+                else if (it.current_node()->stringify().find("/") != std::string::npos) {
+
+                    int numindex = os.str().find_last_of("{");
+                    std::string num = os.str().substr(numindex, os.str().find_last_of("}"));
+                    os.str().pop_back();
+                    os.str().pop_back();
+                    os.str().pop_back();
+
+                    os << "\\frac";
+                    //os << num;
+                }
+                else if (it.current_node()->stringify().find("**") != std::string::npos) {
+                    os << "^";
+                }
+                else //(it.current_node()->stringify() == "-")
+                {
+                    os << "-";
+                }
+            }
+            it.next();
+            //next.next();
+        }
+    }
+    void visit_pow_middle(Pow* node) {
+        os << "^";
+    }
+    void visit_pow_end(Pow* node) {
+        Base* rightop = node->get_child(1);
+        Iterator it(rightop);
+        Iterator next(rightop);
+        os << "{";
+        while (it.is_done() == false)
+        {
+
+
+
+            if (it.current_node()->number_of_children() == 0) {
+                os << "{" << it.current_node()->stringify() << "}";
+            }
+
+            else if (it.current_node()->number_of_children() == 2 && it.current_index() == 1) {
+                //leftop->accept(_ptr, it.current_index());
+
+                if (it.current_node()->stringify().find("+") != std::string::npos)
+                {
+                    os << "+";
+                }
+                else if (it.current_node()->stringify().find("*") != std::string::npos)
+                {
+                    os << "\\cdot";
+                }
+                else if (it.current_node()->stringify().find("/") != std::string::npos) {
+
+                    int numindex = os.str().find_last_of("{");
+                    std::string num = os.str().substr(numindex, os.str().find_last_of("}"));
+                    os.str().pop_back();
+                    os.str().pop_back();
+                    os.str().pop_back();
+                    os << "\\frac";
+                    //os << num;
+                }
+                else if (it.current_node()->stringify().find("**") != std::string::npos) {
+                    os << "^";
+                }
+                else //(it.current_node()->stringify() == "-")
+                {
+                    os << "-";
+                }
+            }
+            it.next();
+            //next.next();
+        }
+        os << ")";
+        os << "}";
+    }
 };
 
 #endif //__VISITLATEX_HPP__

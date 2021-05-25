@@ -9,6 +9,7 @@ class Pow : public Base {
 private:
     Base* _lop;
     Base* _rop;
+    Pow* _node;
 public:
     ~Pow(){
 	delete _lop;
@@ -40,9 +41,20 @@ public:
         }
     }
 
-    void accept(Visitor* visitor, int index) {}
-    bool getRead() {}
-    void setRead() {}
+    void accept(Visitor* visitor, int index) {
+        if (index == 0) {
+            visitor->visit_pow_begin(this->_node);
+        }
+        else if (index == 1) {
+            visitor->visit_pow_middle(this->_node);
+        }
+        else {
+            visitor->visit_pow_end(this->_node);
+        }
+    }
+    void SetNode(Pow* node) {
+        this->_node = node;
+    }
 };
 
 #endif //__POW_HPP__

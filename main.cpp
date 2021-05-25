@@ -20,34 +20,17 @@ int main() {
     // all the classes that you create (and can be instantiated) in this lab
     Visitor* LaTeXVisitor = new VisitLatex();
     Base* four = new Op(4);
-    Op* Op1 = dynamic_cast<Op*>(four);
-    Op1->SetNode(Op1);
     Base* two = new Op(2);
-    Op* Op2 = dynamic_cast<Op*>(two);
-    Op2->SetNode(Op2);
     Base* three = new Op(3);
-    Op* Op3 = dynamic_cast<Op*>(three);
-    Op3->SetNode(Op3);
     Base* seven = new Op(7.0);
-    Op* Op7 = dynamic_cast<Op*>(seven);
-    Op7->SetNode(Op7);
-    Base* add = new Add(three, four);
-    Add* Addptr2 = dynamic_cast<Add*>(add);
-    Addptr2->SetNode(Addptr2);
-    Base* add2 = new Add(add, two);
-    Add* Addptr3 = dynamic_cast<Add*>(add2);
-    Addptr2->SetNode(Addptr3);
-    Base* sub = new Sub(add2, seven);
-    Sub* subptr = dynamic_cast<Sub*>(sub);
-    subptr->SetNode(subptr);
-   // Base* mult = new Mult(add, seven);
-    Base* Addbaseptr = new Add(add, seven);
-    Add* Addptr = dynamic_cast<Add*>(Addbaseptr);  // get rid of this line, use visitor pattern instead(?)
+    Base* mult = new Mult(four, two);
+    Base* Divbaseptr = new Div(mult, two);
+    Div* Addptr = dynamic_cast<Div*>(Divbaseptr);  // get rid of this line, use visitor pattern instead(?)
     Addptr->SetNode(Addptr); // get rid of SetNode(), use visitor pattern instead(?)
 
-    Iterator Additerator(Addbaseptr);
+    Iterator Additerator(Divbaseptr);
     
-   VisitLatex* LaTeXVisitorptr = dynamic_cast<VisitLatex*>(LaTeXVisitor); // making a ptr to derived class
+    VisitLatex* LaTeXVisitorptr = dynamic_cast<VisitLatex*>(LaTeXVisitor); // making a ptr to derived class
     LaTeXVisitorptr->setPtr(LaTeXVisitor);
 
 
@@ -68,27 +51,16 @@ int main() {
         Additerator.next();
     }
 
-    /*for (int i = 0; i < Addptr->number_of_children(); ++i) {
-        cout << Addptr->get_child(i)->evaluate() << endl;
-    }*/
-
     cout << "Finished getting children" << endl;
 
     cout << "Printing in LaTeX Format: " << endl;
     stringstream os;
     
-   /* Addbaseptr->accept(LaTeXVisitor, 0);
-    Addbaseptr->accept(LaTeXVisitor, 1);
-    Addbaseptr->accept(LaTeXVisitor, 2);*/
-    
-   cout << LaTeXVisitorptr->PrintLaTeX(Addbaseptr) << endl;
-
-
-    //Base* minus = new Sub(add, two);
+   cout << LaTeXVisitorptr->PrintLaTeX(Divbaseptr) << endl;
 
 
    cout << "Printing in normal format: " << endl;
-    std::cout << Addbaseptr->stringify() << " = " << Addbaseptr->evaluate() << std::endl;
+    std::cout << Divbaseptr->stringify() << " = " << Divbaseptr->evaluate() << std::endl;
 
 
 

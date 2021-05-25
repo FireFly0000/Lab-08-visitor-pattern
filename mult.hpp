@@ -42,7 +42,15 @@ public:
     }
     void accept(Visitor* visitor, int index)
     {
-
+        if (index == 0) {
+            visitor->visit_mult_begin(this->_node);
+        }
+        else if (index == 1) {
+            visitor->visit_mult_middle(this->_node);
+        }
+        else {
+            visitor->visit_mult_end(this->_node);
+        }
     }
     void SetNode(Mult* node) {
         this->_node = node;

@@ -40,7 +40,17 @@ public:
                 return nullptr;
         }
     }
-    void accept(Visitor* visitor, int index) {}
+    void accept(Visitor* visitor, int index) {
+        if (index == 0) {
+            visitor->visit_sub_begin(this->_node);
+        }
+        else if (index == 1) {
+            visitor->visit_sub_middle(this->_node);
+        }
+        else {
+            visitor->visit_sub_end(this->_node);
+        }
+    }
     void SetNode(Sub* node) {
         this->_node = node;
     }

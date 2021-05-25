@@ -8,6 +8,7 @@ class Div : public Base {
 private:
     Base* _lop;
     Base* _rop;
+    Div* _node;
 public:
     ~Div(){
       delete _lop;
@@ -40,9 +41,20 @@ public:
         }
     }
 
-    void accept(Visitor* visitor, int index) {}
-    bool getRead(){}
-    void setRead() {}
+    void accept(Visitor* visitor, int index) {
+        if (index == 0) {
+            visitor->visit_div_begin(this->_node);
+        }
+        else if (index == 1) {
+            visitor->visit_div_middle(this->_node);
+        }
+        else {
+            visitor->visit_div_end(this->_node);
+        }
+    }
+    void SetNode(Div* node) {
+        this->_node = node;
+    }
 };
 
 #endif //__DIV_HPP__
