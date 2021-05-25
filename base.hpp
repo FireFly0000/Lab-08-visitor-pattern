@@ -16,7 +16,7 @@ class Base {
 	//still neeed to implement
 	virtual int number_of_children() = 0;
         virtual Base* get_child(int i) = 0;
-        virtual void accept(Visitor* visitor, int index) =0;
+        virtual void accept(Visitor* visitor, int index, std::string& res) =0;
 };
 
 #endif //__BASE_HPP__

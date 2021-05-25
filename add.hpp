@@ -46,7 +46,18 @@ public:
 		return nullptr;
 	}
    }
-  virtual void accept(Visitor* visitor, int index){ }
+  virtual void accept(Visitor* visitor, int index, std::string& res){ 
+	if(index == 0){
+                visitor->visit_add_begin(this, res);
+	}
+	else if(index == 1){
+		visitor->visit_add_middle(this, res);
+	}
+	else if(index == 2){
+		visitor->visit_add_end(this, res);
+	}
+		
+  }
 };
 
 #endif //__ADD_HPP__

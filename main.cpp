@@ -16,12 +16,16 @@
 #include "iterator.hpp"
 
 using namespace std;
-/*std::string PrintLaTeX(Base* ptr){
-    VisitLatex* v = new VisitLatex();
-    for(Iterator it(ptr); !it.is_done();it.next()){
-        it.current_node()->accept(v,it.current_index);
-    }
-}*/
+std::string PrintLaTeX(Base* ptr){
+        VisitLatex* v = new VisitLatex();
+        std::string res;
+        for(Iterator it(ptr); !it.is_done();it.next()){
+                it.current_node()->accept(v,it.current_index(), res);
+        }
+	res = "$" + res + "$";
+        return res;
+}
+
 
 int main(int argc, char* argv[]) {
     Factory test;
@@ -44,10 +48,7 @@ int main(int argc, char* argv[]) {
     //cout << op->number_of_children() << endl;
     //cout << op->get_child(0)->evaluate() << endl;
     
-    VisitLatex* v = new VisitLatex();
-    for(Iterator it(op); !it.is_done();it.next()){
-	it.current_node()->accept(v,it.current_index());	
-    }
+    cout << PrintLaTeX(op);
     cout << endl;
     return 0;
 }

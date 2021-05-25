@@ -2,6 +2,8 @@
 #define __VISITLATEX_HPP__
 
 #pragma once
+#include <string>
+#include <string.h> //for to_string()
 #include "visitor.hpp"
 #include "iterator.hpp"
 #include "op.hpp"
@@ -11,20 +13,26 @@ class VisitLatex: public Visitor {
 public:
     VisitLatex(){ };
     // Nodes with no children are visited only once (index = 0)
-    void visit_op(Op* node){
-   	 std::cout << "{" << node->evaluate() << "}";
+    void visit_op(Op* node, std::string& res){
+	res = res + "{" + node->stringify() + "}";
     }
-    void visit_rand(Rand* node){
-	std::cout << "{" << node->evaluate() << "}";
+    void visit_rand(Rand* node, std::string& res){
+	res = res + "{" + node->stringify() + "}";
     }
     // Nodes with two children are visited three times.
     // index = 0 -> begin
     // index = 1 -> middle
     // index = 2 -> end
     
-    //void visit_add_begin(Add* node);
-    //void visit_add_middle(Add* node);
-    //void visit_add_end(Add* node);
+    void visit_add_begin(Add* node, std::string& res){
+	res = res + "{(";
+    }
+    void visit_add_middle(Add* node, std::string& res){
+	res = res + "+";
+    }	
+    void visit_add_end(Add* node, std::string& res){
+	res = res + ")}";
+    }
     //void visit_sub_begin(Sub* node);
     //void visit_sub_middle(Sub* node);
     //void visit_sub_end(Sub* node);

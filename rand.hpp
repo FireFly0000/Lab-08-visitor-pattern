@@ -3,6 +3,7 @@
 #ifndef __RAND_HPP__
 #define __RAND_HPP__
 
+#include <string>
 #include "base.hpp"
 #include "visitor.hpp"
 #include "visitLaTex.hpp"
@@ -33,9 +34,10 @@ public:
                 std:: cout << "ERROR, AN OPERAND HAS NO CHILDREN" << std::endl;
                 return nullptr;
     }
-    /*void accept(Visitor* visitor, int index){
- 	visitor->visit_rand(this);
-    }*/
+    void accept(Visitor* visitor, int index, std::string& res){
+ 	if (index == 0)
+		visitor->visit_rand(this, res);
+    }
 
 };
 

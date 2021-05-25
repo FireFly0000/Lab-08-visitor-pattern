@@ -1,6 +1,8 @@
 #ifndef __VISITOR_HPP__
 #define __VISITOR_HPP__
 
+#include <string>
+
 class Op;
 class Rand;
 class Add;
@@ -14,17 +16,17 @@ class Visitor{
         //virtual ~Visitor() = default;
         //Visitor() = default;
         // Nodes with no children are visited only once (index = 0)
-        virtual void visit_op(Op* node) = 0;
-        virtual void visit_rand(Rand* node) = 0;
+        virtual void visit_op(Op* node, std::string& res) = 0;
+        virtual void visit_rand(Rand* node, std::string& res) = 0;
 
         // Nodes with two children are visited three times.
         // index = 0 -> begin
         // index = 1 -> middle
         // index = 2 -> end
         
-	//virtual void visit_add_begin(Add* node) = 0;
-        //virtual void visit_add_middle(Add* node) = 0;
-        //virtual void visit_add_end(Add* node) = 0;
+	virtual void visit_add_begin(Add* node, std::string& res) = 0;
+        virtual void visit_add_middle(Add* node, std::string& res) = 0;
+        virtual void visit_add_end(Add* node, std::string& res) = 0;
         //virtual void visit_sub_begin(Sub* node) = 0;
         //virtual void visit_sub_middle(Sub* node) = 0;
         //virtual void visit_sub_end(Sub* node) = 0;

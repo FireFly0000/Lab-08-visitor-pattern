@@ -30,8 +30,10 @@ public:
                 std:: cout << "ERROR, AN OPERAND HAS NO CHILDREN" << std::endl;
                 return nullptr;
     }
-    void accept(Visitor* visitor, int index){
-        visitor->visit_op(this);
+    void accept(Visitor* visitor, int index, std::string& res){
+        if(index == 0)
+		visitor->visit_op(this, res);
+	
     }
 
 };

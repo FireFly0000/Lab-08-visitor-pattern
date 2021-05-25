@@ -25,6 +25,7 @@ class Iterator {
         bool is_done();
         Base* current_node();
         int current_index();
+        //std::string PrintLaTeX(Base* ptr);
 };
 
 #endif //_ITERATOR_HPP_

@@ -51,7 +51,7 @@ public:
         }
     }
 
-virtual void accept(Visitor* visitor, int index) { } 
+virtual void accept(Visitor* visitor, int index, std::string& res) { } 
 };
 
 #endif //__POW_HPP__
