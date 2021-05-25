@@ -9,6 +9,8 @@ class Sub : public Base {
 private:
     Base*  _lop;
     Base*  _rop;
+    Sub* _node;
+
 public:
     ~Sub(){
 	delete _lop;
@@ -38,7 +40,10 @@ public:
                 return nullptr;
         }
     }
-    void accept(Visitor* visitor, int index);
+    void accept(Visitor* visitor, int index) {}
+    void SetNode(Sub* node) {
+        this->_node = node;
+    }
 };
 
 #endif //__SUB_HPP__

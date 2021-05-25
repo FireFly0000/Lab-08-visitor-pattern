@@ -9,6 +9,7 @@ protected:
     Base* _lop;
     Base* _rop;
     Add* _node;
+    bool read = false;
 
 public:
     ~Add() {
@@ -20,6 +21,8 @@ public:
         _node = nullptr;
         _rop = rop;
     };
+    void setRead(bool val) { read = val; };
+    bool getRead() { return this->read; }
     virtual double evaluate() { return _lop->evaluate() + _rop->evaluate(); };
     virtual std::string stringify() {
         std::string res = "(" + _lop->stringify() + "+" + _rop->stringify() + ")";

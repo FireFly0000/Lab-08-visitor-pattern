@@ -8,6 +8,7 @@ class Mult : public Base {
 private:
     Base* _lop;
     Base* _rop;
+    Mult* _node;
 public:
     ~Mult(){
 	delete _lop;
@@ -39,10 +40,18 @@ public:
                 return nullptr;
         }
     }
+    void accept(Visitor* visitor, int index)
+    {
 
+    }
+    void SetNode(Mult* node) {
+        this->_node = node;
+    }
+    bool getRead() {}
+    void setRead() {}
 
 };
-void accept(Visitor* visitor, int index);
+
 
 #endif //__MULT_HPP__
 

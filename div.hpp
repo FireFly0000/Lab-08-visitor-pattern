@@ -40,7 +40,9 @@ public:
         }
     }
 
-    void accept(Visitor* visitor, int index);
+    void accept(Visitor* visitor, int index) {}
+    bool getRead(){}
+    void setRead() {}
 };
 
 #endif //__DIV_HPP__
